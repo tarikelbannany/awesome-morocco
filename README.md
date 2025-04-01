@@ -8,9 +8,16 @@ A categorized list of official Moroccan digital services and platforms.
 
 ---
 
-## **Digital Identity & Administration services**  
+## **Digital Identity**  
 - **[CINe (Carte Nationale d'Identité Électronique)](https://www.cnie.ma)**  
-  - National Electronic Identity Card Portal.  
+  - National Electronic Identity Card Portal.
+  - Application/Renewal of the biometric eCARD.
+- **[Passport ](https://www.passeport.ma/)** 
+  - National Electronic Passport Portal. 
+  - Application/Renewal of the biometric passport.
+
+## **Administration services**   
+
 - **[Watiqa](https://www.watiqa.ma/)**  
   - The WATIQA platform is an online service that allows users to electronically order administrative documents and receive them by registered mail at an address of their choice.
 - **[Rokhas](https://rokhas.ma/)**  
