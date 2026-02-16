@@ -1,0 +1,11 @@
+# Awesome Morocco — awesome-morocco.xfantome.net
+# Directory of 90+ Moroccan Government Digital Services
+
+User-agent: *
+Allow: /
+# Sitemap
+Sitemap: https://awesome-morocco.xfantome.net/sitemap.xml
+
+# Crawl-delay (be polite)
+User-agent: *
+Crawl-delay: 1
