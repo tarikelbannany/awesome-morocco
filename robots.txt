@@ -1,11 +1,8 @@
-# Awesome Morocco — awesome-morocco.xfantome.net
-# Directory of 90+ Moroccan Government Digital Services
+# Awesome Morocco — https://tarikelbannany.github.io/awesome-morocco/
+# Open-source directory of 160+ Moroccan government digital services
 
 User-agent: *
 Allow: /
-# Sitemap
-Sitemap: https://awesome-morocco.xfantome.net/sitemap.xml
-
-# Crawl-delay (be polite)
-User-agent: *
 Crawl-delay: 1
+
+Sitemap: https://tarikelbannany.github.io/awesome-morocco/sitemap.xml
