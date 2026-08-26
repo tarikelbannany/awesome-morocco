@@ -147,445 +147,205 @@ tailwind.config = {
   }
 }
 </script>
+<!-- Theme follows the operating-system / browser preference -->
+<script>(function(){var m=window.matchMedia('(prefers-color-scheme: dark)');function a(e){document.documentElement.classList.toggle('dark', e.matches);}a(m);m.addEventListener?m.addEventListener('change',a):m.addListener(a);})();</script>
 <style>
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes scaleIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
-  @keyframes starPulse { 0%,100%{opacity:0.15} 50%{opacity:0.4} }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes auraPulse { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.05)} }
-  @keyframes drift { 0%{transform:translate(0,0)} 25%{transform:translate(30px,-20px)} 50%{transform:translate(-10px,15px)} 75%{transform:translate(-25px,-10px)} 100%{transform:translate(0,0)} }
-  @keyframes glowLine { 0%{opacity:0;transform:translateX(-100%)} 50%{opacity:1} 100%{opacity:0;transform:translateX(100%)} }
+  :root{
+    --accent:#C1272D; --accent-weak:rgba(193,39,45,.10);
+    --muted:#4B5563; --line:rgba(0,0,0,.09);
+  }
+  .dark{
+    --accent:#E4434A; --accent-weak:rgba(228,67,74,.16);
+    --muted:#AEB4BF; --line:rgba(255,255,255,.12);
+  }
+  .text-muted{ color:var(--muted); }
+  .tabular-nums{ font-variant-numeric:tabular-nums; }
+  html,body{ overflow-x:hidden; }
+  #searchInput::placeholder,#paletteInput::placeholder{ color:var(--muted); }
 
-  .animate-float { animation: float 6s ease-in-out infinite; }
-  .animate-shimmer { background-size:200% 100%; animation: shimmer 3s linear infinite; }
-  .card-enter { animation: scaleIn 0.4s cubic-bezier(0.16,1,0.3,1) both; }
-  .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-  .slide-down { animation: slideDown 0.3s ease both; }
+  /* Accent helpers */
+  .group:hover .g-accent{ color:var(--accent); }
+  .hover-accent{ transition:color .15s ease; }
+  .hover-accent:hover{ color:var(--accent); }
 
-  /* Zellige pattern overlay */
-  .zellige-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C1272D' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
+  /* Header accents */
+  .accent-hairline{ background:linear-gradient(90deg,transparent,var(--accent),transparent); opacity:.4; }
+  .brand-badge{ background:var(--accent-weak); box-shadow:inset 0 0 0 1px rgba(193,39,45,.12); }
+  .dark .brand-badge{ background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+  .search-shell{ background:rgba(17,24,39,.035); }
+  .dark .search-shell{ background:rgba(255,255,255,.05); }
 
-  /* Star decorations */
-  .star-8 {
-    position:absolute; width:20px; height:20px;
-    background: currentColor; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-    animation: starPulse 4s ease-in-out infinite;
-  }
+  /* Mono keyboard badge */
+  .kbd{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1;
+        padding:3px 5px; border-radius:5px; border:1px solid var(--line);
+        background:rgba(0,0,0,.03); color:var(--muted); white-space:nowrap; }
+  .dark .kbd{ background:rgba(255,255,255,.05); }
 
-  /* Scrollbar */
-  ::-webkit-scrollbar { width:6px; }
-  ::-webkit-scrollbar-track { background:transparent; }
-  ::-webkit-scrollbar-thumb { background:#C1272D40; border-radius:3px; }
-  ::-webkit-scrollbar-thumb:hover { background:#C1272D80; }
-  .dark ::-webkit-scrollbar-thumb { background:#D4A84340; }
-  .dark ::-webkit-scrollbar-thumb:hover { background:#D4A84380; }
+  /* Search field focus ring */
+  .field-focus{ transition:border-color .15s ease, box-shadow .15s ease; }
+  .field-focus:focus-within{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-weak); }
 
-  /* Card hover */
-  .service-card { transition: all 0.35s cubic-bezier(0.16,1,0.3,1); }
-  @media (hover: hover) { .service-card:hover { transform: translateY(-6px); } }
-  .service-card:hover .card-shine { opacity:1; }
-  .card-shine { transition: opacity 0.35s ease; opacity:0; position:absolute; inset:0; background:linear-gradient(135deg,rgba(212,168,67,0.08) 0%,transparent 60%); border-radius:inherit; pointer-events:none; }
+  /* List rows */
+  .row{ transition:background .12s ease, box-shadow .12s ease; animation:rowIn .25s ease both; }
+  .row:hover{ background:rgba(0,0,0,.02); box-shadow:inset 3px 0 0 var(--accent); }
+  .dark .row:hover{ background:rgba(255,255,255,.03); }
+  .row:focus-visible{ outline:none; background:var(--accent-weak); box-shadow:inset 3px 0 0 var(--accent); }
+  [dir="rtl"] .row:hover, [dir="rtl"] .row:focus-visible{ box-shadow:inset -3px 0 0 var(--accent); }
+  @keyframes rowIn{ from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
 
-  /* Dark mode card enhancements */
-  .dark .service-card {
-    background: linear-gradient(145deg, rgba(30,33,50,0.95) 0%, rgba(24,27,40,0.98) 100%);
-    border-color: rgba(212,168,67,0.15);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
-  }
-  .dark .service-card:hover {
-    border-color: rgba(212,168,67,0.35);
-    box-shadow: 0 8px 32px rgba(212,168,67,0.12), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-  .dark .service-card .card-shine {
-    background: linear-gradient(135deg, rgba(212,168,67,0.06) 0%, rgba(193,39,45,0.03) 40%, transparent 70%);
-  }
+  /* Category tag — calm neutral label; emoji carries the colour */
+  .cat-tag{ font-size:12px; font-weight:600; padding:3px 10px; border-radius:7px; letter-spacing:.01em;
+            background:rgba(17,24,39,.05); color:#374151; border:1px solid rgba(17,24,39,.09); white-space:nowrap; transition:background .12s ease,border-color .12s ease; }
+  .dark .cat-tag{ background:rgba(255,255,255,.06); color:#D6DAE1; border-color:rgba(255,255,255,.12); }
+  /* Highlight the row's category tag on hover */
+  .row:hover .cat-tag{ background:var(--accent-weak); color:var(--accent); border-color:transparent; }
+  .dark .row:hover .cat-tag{ color:#FF9DA2; }
 
-  /* Chip active */
-  .chip-active { background: #C1272D !important; color: white !important; border-color: #C1272D !important; }
-  .dark .chip-active { background: #D4A843 !important; color: #0D0F14 !important; border-color: #D4A843 !important; }
+  /* Category section header (sort-by-category) */
+  .cat-head{ color:var(--accent); grid-column:1 / -1; }
+  .dark .cat-head{ color:#FF9DA2; }
 
-  /* RTL adjustments */
-  [dir="rtl"] .font-display { font-family: 'Noto Kufi Arabic', 'Bricolage Grotesque', sans-serif; }
+  /* Service cards (3-column grid) */
+  .scard{ animation:rowIn .28s ease both; transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+  .scard:hover{ transform:translateY(-3px); border-color:var(--accent); box-shadow:0 10px 28px rgba(0,0,0,.09); }
+  .dark .scard:hover{ border-color:var(--accent); box-shadow:0 12px 30px rgba(0,0,0,.55); background:rgba(255,255,255,.035); }
+  .cat-ico{ background:var(--accent-weak); box-shadow:inset 0 0 0 1px rgba(193,39,45,.10); }
+  .dark .cat-ico{ background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+  .clamp2{ display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
-  /* Page transition */
-  .page-fade { transition: opacity 0.2s ease; }
+  /* Chips (category pills + language buttons share .chip-active) */
+  .chip-active{ background:var(--accent)!important; color:#fff!important; border-color:var(--accent)!important; }
+  [data-chip]:not(.chip-active):hover{ border-color:var(--accent)!important; color:var(--accent)!important; }
 
-  /* ====== DARK MODE ATMOSPHERE ====== */
+  /* Command palette */
+  .palette-fade{ animation:pfade .12s ease both; }
+  @keyframes pfade{ from{opacity:0} to{opacity:1} }
+  .palette-box{ animation:pin .16s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes pin{ from{opacity:0;transform:translate(-50%,-8px)} to{opacity:1;transform:translate(-50%,0)} }
+  .p-item{ transition:background .1s ease; }
+  .p-item.active{ background:var(--accent-weak); }
+  .p-item.active .p-arrow{ color:var(--accent); }
+  .p-section{ font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); padding:9px 16px 4px; }
 
-  /* Dark body gradient */
-  .dark body {
-    background: linear-gradient(180deg, #111320 0%, #141827 40%, #111320 100%);
-  }
-
-  /* Dark mode patterns - brighter zellige */
-  .dark .zellige-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4A843' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  /* Dark mode hero - dramatic ambient orbs */
-  .dark .dark-orb-1 {
-    opacity: 1;
-    background: radial-gradient(circle, rgba(212,168,67,0.18) 0%, rgba(212,168,67,0.06) 40%, transparent 70%);
-    animation: drift 20s ease-in-out infinite;
-  }
-  .dark .dark-orb-2 {
-    opacity: 1;
-    background: radial-gradient(circle, rgba(193,39,45,0.14) 0%, rgba(193,39,45,0.05) 40%, transparent 70%);
-    animation: drift 25s ease-in-out infinite reverse;
-  }
-  .dark .dark-orb-3 {
-    opacity: 1;
-    background: radial-gradient(circle, rgba(0,98,51,0.12) 0%, rgba(0,98,51,0.04) 40%, transparent 70%);
-    animation: drift 22s ease-in-out infinite;
-  }
-
-  /* Navbar enhancements */
-  nav { box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-  .dark nav { box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.3); }
-
-  /* Dark mode search bar glow */
-  .dark #searchInput {
-    background: rgba(30,33,50,0.9);
-    border-color: rgba(212,168,67,0.18);
-    box-shadow: 0 0 0 1px rgba(212,168,67,0.06);
-    color: rgba(255,255,255,0.95);
-  }
-  .dark #searchInput:focus {
-    background: rgba(35,38,55,0.95);
-    border-color: rgba(212,168,67,0.4);
-    box-shadow: 0 0 0 3px rgba(212,168,67,0.1), 0 0 24px rgba(212,168,67,0.08);
-    color: white;
-  }
-  .dark #searchInput::placeholder {
-    color: rgba(255,255,255,0.4);
-  }
-
-  /* Dark mode sticky filter bar */
-  .dark .dark-filter-bar {
-    background: rgba(17,19,32,0.94) !important;
-    border-bottom-color: rgba(212,168,67,0.1) !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-  }
-
-  /* Dark mode chips */
-  .dark [data-chip]:not(.chip-active) {
-    background: rgba(30,33,50,0.85) !important;
-    border-color: rgba(212,168,67,0.15) !important;
-    color: rgba(255,255,255,0.75) !important;
-  }
-  .dark [data-chip]:not(.chip-active):hover {
-    border-color: rgba(212,168,67,0.35) !important;
-    background: rgba(212,168,67,0.12) !important;
-    color: white !important;
-  }
-
-  /* Dark mode pagination */
-  .dark .pag-btn {
-    background: rgba(30,33,50,0.85);
-    border-color: rgba(212,168,67,0.15);
-    color: rgba(255,255,255,0.8);
-  }
-  .dark .pag-btn:hover {
-    background: rgba(212,168,67,0.12);
-    border-color: rgba(212,168,67,0.3);
-    color: white;
-  }
-  .dark .pag-btn-active {
-    background: linear-gradient(135deg, #D4A843 0%, #C1952F 100%) !important;
-    border-color: transparent !important;
-    box-shadow: 0 2px 12px rgba(212,168,67,0.3);
-  }
-
-  /* Dark mode back to top */
-  .dark #backToTop {
-    background: linear-gradient(135deg, #D4A843, #C1952F) !important;
-    box-shadow: 0 4px 16px rgba(212,168,67,0.3) !important;
-  }
-
-  /* Footer */
-  footer {
-    position: relative;
-    overflow: hidden;
-  }
-  footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #C1272D, transparent);
-  }
-  .dark footer::before {
-    background: linear-gradient(90deg, transparent, #D4A843, transparent);
-  }
-
-  /* Dark footer */
-  .dark footer {
-    background: linear-gradient(180deg, rgba(15,17,26,0.95) 0%, rgba(10,12,18,0.98) 100%) !important;
-    border-top-color: rgba(212,168,67,0.08) !important;
-  }
+  /* Pagination */
+  .pg-btn{ min-width:32px; height:32px; padding:0 9px; display:inline-flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:600; border-radius:8px; border:1px solid var(--line); background:transparent;
+    color:var(--muted); cursor:pointer; transition:all .15s ease; font-variant-numeric:tabular-nums; }
+  .pg-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .pg-active{ background:var(--accent)!important; border-color:var(--accent)!important; color:#fff!important; cursor:default; }
+  .pg-disabled{ opacity:.35; cursor:not-allowed; }
+  .pg-disabled:hover{ border-color:var(--line); color:var(--muted); }
 
   /* Footer link pill */
-  .footer-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 9999px;
-    font-size: 12px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-  }
-  .footer-link:hover {
-    transform: translateY(-1px);
-  }
+  .footer-link{ display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:9999px;
+    font-size:12px; font-weight:500; transition:all .25s ease; border:1px solid transparent; }
+  .footer-link:hover{ transform:translateY(-1px); }
+  .accent-text{ color:var(--accent); }
+  .footer-link-accent{ transition:all .2s ease; }
+  .footer-link-accent:hover{ color:var(--accent); border-color:var(--accent); background:var(--accent-weak); }
 
-  /* Dark mode gradient text */
-  .dark .dark-gradient-text {
-    background: linear-gradient(135deg, #D4A843 0%, #E8C96A 50%, #006233 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-  }
+  /* Scrollbars */
+  ::-webkit-scrollbar{ width:9px; height:9px; }
+  ::-webkit-scrollbar-thumb{ background:var(--accent-weak); border-radius:5px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
+  .no-scrollbar::-webkit-scrollbar{ display:none; } .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
 
-  /* Noise texture overlay for dark mode */
-  .dark .noise-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.015;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
-  }
+  /* Arabic display font */
+  [dir="rtl"] .font-display{ font-family:'Noto Kufi Arabic','Plus Jakarta Sans',sans-serif; }
 
-  /* Dark stat numbers glow */
-  .dark .stat-glow {
-    text-shadow: 0 0 40px rgba(212,168,67,0.4);
-  }
-  .dark .stat-glow-green {
-    text-shadow: 0 0 40px rgba(0,98,51,0.4);
-  }
+  /* Chip scroll fade */
+  .chip-scroll-wrap{ position:relative; }
+  .chip-scroll-wrap::after{ content:''; position:absolute; top:0; bottom:0; right:0; width:32px;
+    background:linear-gradient(to right,transparent,var(--chip-fade,rgba(255,255,255,.95))); pointer-events:none; transition:opacity .3s; }
+  .chip-scroll-wrap.scrolled-end::after{ opacity:0; }
+  .dark .chip-scroll-wrap{ --chip-fade:rgba(0,0,0,.96); }
+  [dir="rtl"] .chip-scroll-wrap::after{ right:auto; left:0; background:linear-gradient(to left,transparent,var(--chip-fade,rgba(255,255,255,.95))); }
 
-  /* Dark hero badge */
-  .dark .dark-hero-badge {
-    background: rgba(212,168,67,0.12) !important;
-    border-color: rgba(212,168,67,0.25) !important;
-    box-shadow: 0 0 24px rgba(212,168,67,0.08);
-  }
-
-  /* Dark mode separator line glow */
-  .dark .stat-divider {
-    background: linear-gradient(to bottom, transparent, rgba(212,168,67,0.2), transparent) !important;
-  }
-
-  .no-scrollbar::-webkit-scrollbar { display:none; }
-  .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
-
-  /* Scroll fade indicators for chip container */
-  .chip-scroll-wrap { position: relative; }
-  .chip-scroll-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0; right: 0;
-    width: 48px;
-    background: linear-gradient(to right, transparent, var(--chip-fade, rgba(253,248,240,0.95)));
-    pointer-events: none;
-    z-index: 2;
-    border-radius: 0 0 4px 0;
-    transition: opacity 0.3s ease;
-  }
-  .chip-scroll-wrap.scrolled-start::before {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0; left: 0;
-    width: 48px;
-    background: linear-gradient(to left, transparent, var(--chip-fade, rgba(253,248,240,0.95)));
-    pointer-events: none;
-    z-index: 2;
-    border-radius: 0 0 0 4px;
-    transition: opacity 0.3s ease;
-  }
-  .chip-scroll-wrap.scrolled-end::after { opacity: 0; }
-  .dark .chip-scroll-wrap::after,
-  .dark .chip-scroll-wrap.scrolled-start::before {
-    --chip-fade: rgba(17,19,32,0.96);
-  }
-
-  /* RTL flip for scroll fades */
-  [dir="rtl"] .chip-scroll-wrap::after { right: auto; left: 0; background: linear-gradient(to left, transparent, var(--chip-fade, rgba(253,248,240,0.95))); }
-  [dir="rtl"] .chip-scroll-wrap.scrolled-start::before { left: auto; right: 0; background: linear-gradient(to right, transparent, var(--chip-fade, rgba(253,248,240,0.95))); }
-
-  /* Scroll hint arrow animation */
-  @keyframes scrollHint { 0%,100%{transform:translateX(0);opacity:0.6} 50%{transform:translateX(5px);opacity:1} }
-  [dir="rtl"] .scroll-hint-arrow { transform: scaleX(-1); }
-
-  /* ====== MOBILE RESPONSIVE ====== */
-  html, body { overflow-x: hidden; }
-
-  /* Hide decorative circles on small screens */
-  @media (max-width: 639px) {
-    .star-8 { display: none; }
-    .footer-link { padding: 8px 16px; font-size: 13px; }
-  }
+  @media (max-width:639px){ .footer-link{ padding:8px 16px; font-size:13px; } }
 </style>
 </head>
 
-<body class="bg-morocco-cream dark:bg-morocco-dark text-morocco-dark dark:text-white/90 font-body transition-colors duration-500">
+<body class="bg-white dark:bg-black text-morocco-dark dark:text-white font-body transition-colors duration-500">
 <!-- Dark mode noise texture -->
 <div class="noise-overlay hidden dark:block"></div>
 
-<!-- ===================== NAVBAR ===================== -->
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl">
-  <div class="absolute inset-0 bg-white/75 dark:bg-[#111320]/90"></div>
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-morocco-red/20 dark:via-morocco-gold/15 to-transparent"></div>
-  <div class="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between relative">
-    <a href="#" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
-      <span class="text-xl sm:text-2xl transition-transform duration-300 group-hover:scale-110 inline-block shrink-0">🇲🇦</span>
-      <span class="font-display text-xs sm:text-sm font-bold tracking-tight text-morocco-dark dark:text-white truncate" id="nav-title">Awesome Morocco</span>
-    </a>
-    <div class="flex items-center gap-0.5 sm:gap-1 shrink-0">
-      <!-- Language switcher -->
-      <div class="flex rounded-lg p-0.5 bg-morocco-dark/[0.04] dark:bg-white/[0.06]">
-        <button onclick="setLang('en')" data-lang-btn="en" class="px-2 sm:px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all chip-active">EN</button>
-        <button onclick="setLang('fr')" data-lang-btn="fr" class="px-2 sm:px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all text-morocco-dark/45 dark:text-white/50 hover:text-morocco-dark dark:hover:text-white">FR</button>
-        <button onclick="setLang('ar')" data-lang-btn="ar" class="px-2 sm:px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all text-morocco-dark/45 dark:text-white/50 hover:text-morocco-dark dark:hover:text-white">AR</button>
-      </div>
-      <div class="w-px h-5 bg-morocco-dark/10 dark:bg-white/10 mx-0.5 sm:mx-1"></div>
-      <!-- Dark mode toggle -->
-      <button onclick="toggleDark()" class="w-9 h-9 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-morocco-dark/40 dark:text-white/50 hover:text-morocco-red dark:hover:text-morocco-gold hover:bg-morocco-dark/5 dark:hover:bg-white/8 transition-all duration-200" aria-label="Toggle dark mode">
-        <svg class="w-[17px] h-[17px] dark:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
-        <svg class="w-[17px] h-[17px] hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
-      </button>
-      <!-- GitHub -->
-      <a href="https://github.com/tarikelbannany/awesome-morocco" target="_blank" class="w-9 h-9 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-morocco-dark/40 dark:text-white/50 hover:text-morocco-dark dark:hover:text-white hover:bg-morocco-dark/5 dark:hover:bg-white/8 transition-all duration-200" aria-label="GitHub">
-        <svg class="w-[17px] h-[17px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+<!-- ===================== HEADER ===================== -->
+<header id="topbar" class="sticky top-0 z-50 backdrop-blur-xl bg-white/90 dark:bg-black/85 border-b border-black/8 dark:border-white/10">
+  <div class="accent-hairline absolute inset-x-0 bottom-0 h-px pointer-events-none"></div>
+
+  <!-- Brand + search + actions -->
+  <div class="max-w-6xl mx-auto px-3 sm:px-5">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2.5 py-2.5 sm:py-0 sm:h-[68px]">
+      <!-- Brand -->
+      <a href="#" class="order-1 flex items-center gap-2.5 shrink-0 group" aria-label="Awesome Morocco — home">
+        <span class="brand-badge grid place-items-center w-9 h-9 sm:w-11 sm:h-11 rounded-xl text-lg sm:text-2xl shrink-0 transition-transform duration-300 group-hover:scale-105">🇲🇦</span>
+        <span class="flex flex-col leading-none min-w-0">
+          <span class="font-display text-[16px] sm:text-[18px] font-extrabold tracking-tight text-morocco-dark dark:text-white">Awesome Morocco</span>
+          <span class="text-[10.5px] sm:text-[11px] text-muted font-medium mt-1 hidden sm:block whitespace-nowrap">Morocco's digital public services</span>
+        </span>
       </a>
+
+      <!-- Actions (share top row with brand on mobile) -->
+      <div class="order-2 sm:order-3 ml-auto sm:ml-0 flex items-center gap-1.5 shrink-0">
+        <div class="flex rounded-lg p-0.5 bg-black/[0.05] dark:bg-white/[0.07]">
+          <button onclick="setLang('en')" data-lang-btn="en" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all chip-active">EN</button>
+          <button onclick="setLang('fr')" data-lang-btn="fr" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">FR</button>
+          <button onclick="setLang('ar')" data-lang-btn="ar" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">AR</button>
+        </div>
+        <a href="https://github.com/tarikelbannany/awesome-morocco" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg flex items-center justify-center text-muted hover:text-morocco-dark dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-all" aria-label="GitHub">
+          <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+      </div>
+
+      <!-- Search: own full-width row on mobile, centered inline on desktop -->
+      <div class="order-3 sm:order-2 basis-full sm:basis-0 sm:flex-1 sm:max-w-xl sm:mx-auto">
+        <div class="field-focus search-shell flex items-center gap-2.5 h-10 sm:h-11 px-3.5 rounded-xl border border-black/10 dark:border-white/12">
+          <svg class="w-[18px] h-[18px] shrink-0 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.3-4.3m1.8-4.7a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+          <input id="searchInput" type="text" class="flex-1 min-w-0 bg-transparent outline-none text-[14px] sm:text-[15px] text-morocco-dark dark:text-white" placeholder="Search 160 services…" autocomplete="off">
+          <button onclick="openPalette()" class="kbd hover-accent inline-flex items-center" title="Command palette (⌘K)">⌘K</button>
+        </div>
+      </div>
     </div>
   </div>
-</nav>
 
-<!-- ===================== HERO ===================== -->
-<header class="relative pt-24 pb-14 sm:pt-36 sm:pb-28 overflow-hidden">
-  <!-- Background layers -->
-  <div class="absolute inset-0 bg-gradient-to-br from-morocco-red/[0.04] via-morocco-cream to-morocco-green/[0.03] dark:from-morocco-gold/[0.06] dark:via-morocco-dark dark:to-morocco-green/[0.04]"></div>
-  <div class="absolute inset-0 zellige-pattern opacity-60 dark:opacity-100"></div>
-
-  <!-- Moroccan geometric accent — top-left -->
-  <div class="hidden sm:block absolute top-16 -left-16 w-64 h-64 border border-morocco-red/[0.07] dark:border-morocco-gold/[0.08] rounded-full"></div>
-  <div class="hidden sm:block absolute top-20 -left-12 w-56 h-56 border border-morocco-red/[0.05] dark:border-morocco-gold/[0.06] rounded-full"></div>
-  <!-- Moroccan geometric accent — bottom-right -->
-  <div class="hidden sm:block absolute -bottom-10 -right-10 w-52 h-52 border border-morocco-green/[0.06] dark:border-morocco-gold/[0.07] rounded-full"></div>
-  <div class="hidden sm:block absolute -bottom-6 -right-6 w-44 h-44 border border-morocco-green/[0.04] dark:border-morocco-gold/[0.05] rounded-full"></div>
-
-  <!-- Decorative stars -->
-  <div class="star-8 text-morocco-red/20 dark:text-morocco-gold/30 top-28 left-[12%]" style="animation-delay:0s"></div>
-  <div class="star-8 text-morocco-green/20 dark:text-morocco-gold/25 top-36 right-[14%]" style="animation-delay:1.5s;width:14px;height:14px"></div>
-  <div class="star-8 text-morocco-red/15 dark:text-morocco-gold/20 bottom-20 left-[22%]" style="animation-delay:2.5s;width:16px;height:16px"></div>
-  <div class="star-8 text-morocco-green/15 dark:text-morocco-gold/25 bottom-28 right-[20%]" style="animation-delay:0.8s;width:12px;height:12px"></div>
-
-  <!-- Light mode orbs -->
-  <div class="absolute top-0 -left-40 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-gradient-to-br from-morocco-red/[0.07] to-transparent rounded-full blur-3xl dark:opacity-0 transition-opacity duration-700"></div>
-  <div class="absolute -bottom-20 -right-40 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-gradient-to-tl from-morocco-green/[0.06] to-transparent rounded-full blur-3xl dark:opacity-0 transition-opacity duration-700"></div>
-  <!-- Dark mode ambient orbs -->
-  <div class="dark-orb-1 absolute top-0 -left-20 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full blur-3xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
-  <div class="dark-orb-2 absolute -bottom-20 -right-20 w-[250px] sm:w-[450px] h-[250px] sm:h-[450px] rounded-full blur-3xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
-  <div class="dark-orb-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] rounded-full blur-3xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
-
-  <!-- Bottom fade -->
-  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-morocco-cream dark:from-morocco-dark to-transparent pointer-events-none"></div>
-
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
-    <!-- Moroccan flag -->
-    <div class="fade-up mb-4 sm:mb-6" style="animation-delay:0.05s">
-      <span class="text-4xl sm:text-5xl lg:text-6xl inline-block animate-float">🇲🇦</span>
-    </div>
-
-    <!-- Badge -->
-    <div class="fade-up" style="animation-delay:0.1s">
-      <span class="dark-hero-badge inline-block px-3 sm:px-4 py-1 text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase rounded-full mb-4 sm:mb-6
-        text-morocco-red/80 bg-morocco-red/[0.06] border border-morocco-red/10
-        dark:text-morocco-gold dark:bg-morocco-gold/[0.08] dark:border-morocco-gold/15" id="hero-badge">Open Source Directory</span>
-    </div>
-
-    <!-- Title -->
-    <h1 class="font-display text-[2rem] sm:text-[3.5rem] lg:text-[4.25rem] font-bold leading-[1.08] sm:leading-[1.05] tracking-tight mb-3 sm:mb-5 fade-up" style="animation-delay:0.2s">
-      <span class="text-morocco-dark dark:text-white" id="hero-title-1">Explore Morocco's</span><br>
-      <span class="dark-gradient-text bg-gradient-to-r from-morocco-red via-morocco-red/90 to-morocco-green dark:from-morocco-gold dark:via-morocco-gold/90 dark:to-morocco-green bg-clip-text text-transparent" id="hero-title-2">Digital Government</span>
-    </h1>
-
-    <!-- Description -->
-    <p class="text-[13px] sm:text-base text-morocco-dark/55 dark:text-white/65 max-w-lg mx-auto mb-3 sm:mb-4 leading-relaxed fade-up px-2 sm:px-0" style="animation-delay:0.3s" id="hero-desc">
-      Your one-stop guide to Morocco's e-government ecosystem. Discover and access digital services for taxes, identity, health, education, social security, business registration, transport, and more.
-    </p>
-    <!-- Sub-description with highlighted services -->
-    <div class="flex flex-wrap items-center justify-center gap-1.5 mb-8 sm:mb-10 fade-up px-4 sm:px-0" style="animation-delay:0.35s">
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-red/[0.06] text-morocco-red/70 dark:bg-morocco-gold/10 dark:text-morocco-gold/80">Idarati</span>
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-green/[0.06] text-morocco-green/70 dark:bg-morocco-green/10 dark:text-morocco-green/80">SIMPL</span>
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-red/[0.06] text-morocco-red/70 dark:bg-morocco-gold/10 dark:text-morocco-gold/80">Massar</span>
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-green/[0.06] text-morocco-green/70 dark:bg-morocco-green/10 dark:text-morocco-green/80">CNSS</span>
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-red/[0.06] text-morocco-red/70 dark:bg-morocco-gold/10 dark:text-morocco-gold/80">Watiqa</span>
-      <span class="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-semibold rounded-full bg-morocco-green/[0.06] text-morocco-green/70 dark:bg-morocco-green/10 dark:text-morocco-green/80">Rokhas</span>
-      <span class="text-[9px] sm:text-[10px] text-morocco-dark/35 dark:text-white/40 font-medium" id="hero-more">& 150+ more</span>
-    </div>
-
-    <!-- Stats row -->
-    <div class="flex items-center justify-center gap-5 sm:gap-12 fade-up" style="animation-delay:0.4s">
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-display font-bold text-morocco-red dark:text-morocco-gold stat-glow leading-none">160+</div>
-        <div class="text-[9px] sm:text-[10px] text-morocco-dark/40 dark:text-white/55 font-semibold mt-1.5 sm:mt-2 uppercase tracking-[0.12em] sm:tracking-[0.15em]" id="stat-services">Services</div>
+  <!-- Filter sub-bar -->
+  <div class="border-t border-black/[0.06] dark:border-white/8">
+    <div class="max-w-6xl mx-auto px-3 sm:px-5 py-2 flex items-center gap-2 sm:gap-4">
+      <div class="chip-scroll-wrap flex-1 min-w-0">
+        <div id="chipContainer" class="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5"></div>
       </div>
-      <div class="w-4 sm:w-6 h-px bg-morocco-dark/10 dark:bg-white/15"></div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-display font-bold text-morocco-green dark:text-morocco-green stat-glow-green leading-none">33</div>
-        <div class="text-[9px] sm:text-[10px] text-morocco-dark/40 dark:text-white/55 font-semibold mt-1.5 sm:mt-2 uppercase tracking-[0.12em] sm:tracking-[0.15em]" id="stat-categories">Categories</div>
-      </div>
-      <div class="w-4 sm:w-6 h-px bg-morocco-dark/10 dark:bg-white/15"></div>
-      <div class="text-center">
-        <div class="text-2xl sm:text-4xl font-display font-bold text-morocco-dark/70 dark:text-white/85 leading-none">3</div>
-        <div class="text-[9px] sm:text-[10px] text-morocco-dark/40 dark:text-white/55 font-semibold mt-1.5 sm:mt-2 uppercase tracking-[0.12em] sm:tracking-[0.15em]" id="stat-langs">Languages</div>
+      <div class="shrink-0 flex items-center gap-2 sm:gap-3">
+        <span id="resultsCount" class="text-[12px] text-muted tabular-nums whitespace-nowrap hidden sm:inline"></span>
+        <button id="sortBtn" onclick="toggleSort()" class="flex items-center gap-1 text-[12px] font-medium text-muted hover-accent whitespace-nowrap" title="Toggle sort">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h13M3 12h9M3 17h5"/></svg>
+          <span id="sortLabel">Name</span>
+        </button>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ===================== SEARCH + FILTERS ===================== -->
-<section class="dark-filter-bar sticky top-14 z-40 bg-morocco-cream/90 dark:bg-morocco-dark/90 backdrop-blur-xl border-b border-morocco-dark/5 dark:border-white/5 py-3 sm:py-4" style="transition:background 0.5s,border-color 0.5s">
-  <div class="max-w-7xl mx-auto px-3 sm:px-6">
-    <!-- Search -->
-    <div class="relative max-w-xl mx-auto mb-3 sm:mb-4">
-      <svg class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-morocco-dark/30 dark:text-white/30 rtl:left-auto rtl:right-3 sm:rtl:right-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input type="text" id="searchInput" class="w-full pl-10 sm:pl-12 pr-4 rtl:pr-10 sm:rtl:pr-12 rtl:pl-4 py-2.5 sm:py-3 bg-white dark:bg-white/5 border border-morocco-red/10 dark:border-morocco-gold/10 rounded-xl sm:rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-morocco-red/30 dark:focus:ring-morocco-gold/30 focus:border-transparent placeholder-morocco-dark/30 dark:placeholder-white/30 transition-all" placeholder="Search services...">
+<!-- ===================== COMMAND PALETTE ===================== -->
+<div id="palette" class="fixed inset-0 z-[60] hidden">
+  <div class="palette-fade absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closePalette()"></div>
+  <div role="dialog" aria-modal="true" aria-label="Command palette" class="palette-box absolute left-1/2 -translate-x-1/2 top-[12vh] w-[92vw] max-w-xl bg-white dark:bg-[#16181f] border border-black/10 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden">
+    <div class="flex items-center gap-2.5 px-4 h-12 border-b border-black/5 dark:border-white/10">
+      <svg class="w-4 h-4 shrink-0 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.3-4.3m1.8-4.7a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+      <input id="paletteInput" type="text" class="flex-1 bg-transparent outline-none text-[15px] text-morocco-dark dark:text-white" placeholder="Search services, categories, actions…" autocomplete="off">
+      <span class="kbd">esc</span>
     </div>
-    <!-- Category chips -->
-    <div class="chip-scroll-wrap">
-      <div class="flex gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 -mx-3 px-3 sm:-mx-0 sm:px-0" id="chipContainer">
-        <button onclick="filterCategory('all')" data-chip="all" class="shrink-0 px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-semibold rounded-full border transition-all chip-active bg-morocco-red text-white border-morocco-red" id="chip-all">All</button>
-      </div>
-      <!-- Scroll hint arrow — visible until user scrolls -->
-      <div id="scrollHint" class="absolute right-1 top-1/2 -translate-y-1/2 z-10 flex items-center gap-0.5 pointer-events-none transition-opacity duration-500">
-        <svg class="scroll-hint-arrow w-4 h-4 text-morocco-red/50 dark:text-morocco-gold/60" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="animation: scrollHint 1.5s ease-in-out infinite"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      </div>
+    <div id="paletteResults" class="max-h-[52vh] overflow-y-auto py-1.5"></div>
+    <div class="flex items-center gap-4 px-4 h-8 border-t border-black/5 dark:border-white/10 text-[11px] text-muted">
+      <span><span class="kbd">↑↓</span> <span id="ph-nav">navigate</span></span>
+      <span><span class="kbd">↵</span> <span id="ph-open">open</span></span>
+      <span><span class="kbd">esc</span> <span id="ph-close">close</span></span>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ===================== SERVICE GRID ===================== -->
-<main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 relative z-10">
-  <!-- Results count -->
-  <div class="flex items-center justify-between mb-4 sm:mb-6">
-    <p class="text-xs sm:text-sm text-morocco-dark/50 dark:text-white/70" id="resultsCount"></p>
-  </div>
-
-  <!-- Grid -->
-  <div id="serviceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5"></div>
+<!-- ===================== SERVICE LIST ===================== -->
+<main class="max-w-6xl mx-auto px-3 sm:px-5 pt-4 sm:pt-6 pb-12 relative z-10 min-h-[62vh]">
+  <div id="serviceList" class="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pb-1 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:overflow-visible sm:snap-none sm:pb-0"></div>
 <noscript>
 <section class="seo-fallback" style="max-width:70rem;margin:0 auto;padding:1rem">
 <h1>Awesome Morocco — 160+ Moroccan Government Digital Services</h1>
@@ -853,66 +613,84 @@ tailwind.config = {
 </noscript>
 
 
-  <!-- Pagination -->
-  <div class="flex items-center justify-center gap-1.5 sm:gap-2 mt-8 sm:mt-12" id="pagination"></div>
+  <!-- Mobile carousel navigation (one card per page, swipe / arrows) -->
+  <div id="carouselNav" class="flex items-center justify-center gap-5 pt-5 sm:hidden" style="display:none">
+    <button onclick="carPrev()" aria-label="Previous" class="w-11 h-11 rounded-full border border-black/10 dark:border-white/12 flex items-center justify-center text-muted hover-accent active:scale-90 transition">
+      <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <span id="carCounter" class="text-[13px] font-semibold text-muted tabular-nums min-w-[64px] text-center">1 / 1</span>
+    <button onclick="carNext()" aria-label="Next" class="w-11 h-11 rounded-full border border-black/10 dark:border-white/12 flex items-center justify-center text-muted hover-accent active:scale-90 transition">
+      <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- Pagination (desktop) -->
+  <div id="pagination" class="hidden sm:flex flex-wrap items-center justify-center gap-1.5 pt-6"></div>
 
   <!-- Empty state -->
-  <div id="emptyState" class="hidden text-center py-14 sm:py-20">
-    <div class="text-5xl sm:text-6xl mb-4">🔍</div>
-    <p class="text-base sm:text-lg font-semibold text-morocco-dark/60 dark:text-white/80" id="empty-title">No services found</p>
-    <p class="text-xs sm:text-sm text-morocco-dark/40 dark:text-white/60 mt-1" id="empty-desc">Try adjusting your search or filters</p>
+  <div id="emptyState" class="hidden text-center py-16 sm:py-24">
+    <div class="text-4xl mb-3 opacity-30">⌕</div>
+    <p class="text-base font-semibold text-morocco-dark dark:text-white" id="empty-title">No services found</p>
+    <p class="text-[13px] text-muted mt-1" id="empty-desc">Try adjusting your search or filters</p>
   </div>
 </main>
 
 <!-- ===================== FOOTER ===================== -->
-<footer class="border-t border-morocco-red/6 dark:border-morocco-gold/8 bg-gradient-to-b from-white/60 to-morocco-cream dark:bg-none zellige-pattern" style="transition:background 0.5s,border-color 0.5s">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 sm:pb-10">
+<footer class="relative border-t border-black/8 dark:border-white/10 bg-black/[0.015] dark:bg-white/[0.02]">
+  <div class="accent-hairline absolute inset-x-0 top-0 h-px pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
 
-    <!-- Top: Brand + Tagline -->
-    <div class="text-center mb-8 sm:mb-10">
-      <div class="inline-flex items-center gap-2 sm:gap-2.5 mb-3">
-        <span class="text-2xl sm:text-3xl">🇲🇦</span>
-        <span class="font-display text-xl sm:text-2xl font-bold text-morocco-red dark:text-morocco-gold tracking-tight">Awesome Morocco</span>
+    <!-- Top: brand + tagline + stats (left) · link pills (right) -->
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-7 sm:gap-10">
+      <div class="max-w-sm">
+        <div class="flex items-center gap-2.5 mb-3.5">
+          <span class="brand-badge grid place-items-center w-10 h-10 rounded-xl text-xl shrink-0">🇲🇦</span>
+          <span class="font-display text-xl font-extrabold tracking-tight accent-text">Awesome Morocco</span>
+        </div>
+        <p class="text-[13px] leading-relaxed text-muted" id="footer-text">
+          An open-source directory of Moroccan government digital services, curated for citizens and developers.
+        </p>
+        <!-- Stats -->
+        <div class="flex items-center gap-3 sm:gap-4 mt-5 text-[12.5px] text-muted">
+          <span><span class="font-extrabold accent-text">160</span> services</span>
+          <span class="opacity-30">•</span>
+          <span><span class="font-extrabold accent-text">33</span> categories</span>
+          <span class="opacity-30">•</span>
+          <span><span class="font-extrabold accent-text">3</span> languages</span>
+        </div>
       </div>
-      <p class="text-xs sm:text-sm text-morocco-dark/50 dark:text-white/60 max-w-md mx-auto leading-relaxed px-4 sm:px-0" id="footer-text">
-        An open-source directory of Moroccan government digital services, curated for citizens and developers.
-      </p>
-    </div>
 
-    <!-- Middle: Links -->
-    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
-      <a href="https://github.com/tarikelbannany/awesome-morocco" target="_blank" class="footer-link bg-morocco-dark/5 dark:bg-white/8 text-morocco-dark/70 dark:text-white/80 hover:bg-morocco-red/10 dark:hover:bg-morocco-gold/15 hover:text-morocco-red dark:hover:text-morocco-gold border-morocco-dark/8 dark:border-white/10 hover:border-morocco-red/20 dark:hover:border-morocco-gold/25">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-      <a href="https://github.com/tarikelbannany/awesome-morocco/issues" target="_blank" class="footer-link bg-morocco-dark/5 dark:bg-white/8 text-morocco-dark/70 dark:text-white/80 hover:bg-morocco-red/10 dark:hover:bg-morocco-gold/15 hover:text-morocco-red dark:hover:text-morocco-gold border-morocco-dark/8 dark:border-white/10 hover:border-morocco-red/20 dark:hover:border-morocco-gold/25" id="footer-contribute">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span id="footer-contribute-text">Contribute</span>
-      </a>
-      <a href="https://github.com/tarikelbannany/awesome-morocco/stargazers" target="_blank" class="footer-link bg-morocco-dark/5 dark:bg-white/8 text-morocco-dark/70 dark:text-white/80 hover:bg-morocco-red/10 dark:hover:bg-morocco-gold/15 hover:text-morocco-red dark:hover:text-morocco-gold border-morocco-dark/8 dark:border-white/10 hover:border-morocco-red/20 dark:hover:border-morocco-gold/25">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-        <span id="footer-star">Star on GitHub</span>
-      </a>
+      <!-- Link pills -->
+      <div class="flex flex-wrap gap-2.5 sm:justify-end sm:shrink-0">
+        <a href="https://github.com/tarikelbannany/awesome-morocco" target="_blank" rel="noopener" class="footer-link footer-link-accent bg-black/[0.04] dark:bg-white/[0.06] text-morocco-dark/75 dark:text-white/80 border border-black/10 dark:border-white/12">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://github.com/tarikelbannany/awesome-morocco/issues" target="_blank" rel="noopener" class="footer-link footer-link-accent bg-black/[0.04] dark:bg-white/[0.06] text-morocco-dark/75 dark:text-white/80 border border-black/10 dark:border-white/12" id="footer-contribute">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <span id="footer-contribute-text">Contribute</span>
+        </a>
+        <a href="https://github.com/tarikelbannany/awesome-morocco/stargazers" target="_blank" rel="noopener" class="footer-link footer-link-accent bg-black/[0.04] dark:bg-white/[0.06] text-morocco-dark/75 dark:text-white/80 border border-black/10 dark:border-white/12">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          <span id="footer-star">Star on GitHub</span>
+        </a>
+      </div>
     </div>
 
     <!-- Divider -->
-    <div class="w-full h-px bg-gradient-to-r from-transparent via-morocco-red/15 dark:via-morocco-gold/15 to-transparent mb-5 sm:mb-6"></div>
+    <div class="w-full h-px bg-black/8 dark:bg-white/10 my-7 sm:my-9"></div>
 
-    <!-- Bottom: Author + License -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-      <p class="text-[11px] sm:text-xs text-morocco-dark/40 dark:text-white/50">
-        Built by <a href="https://tarikelbannany.com" target="_blank" class="font-semibold text-morocco-red dark:text-morocco-gold hover:underline underline-offset-2">Tarik El Bannany</a>
-      </p>
-      <p class="text-[11px] sm:text-xs text-morocco-dark/30 dark:text-white/40">
-        Apache License 2.0
-      </p>
+    <!-- Bottom: author + license -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-[12px] text-muted">
+      <p>Built by <a href="https://tarikelbannany.com" target="_blank" rel="noopener" class="font-semibold accent-text hover:underline underline-offset-2">Tarik El Bannany</a></p>
+      <p class="opacity-80">Apache License 2.0</p>
     </div>
 
   </div>
 </footer>
 
 <!-- ===================== BACK TO TOP ===================== -->
-<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 rtl:right-auto rtl:left-4 sm:rtl:left-6 w-10 h-10 sm:w-11 sm:h-11 bg-morocco-red dark:bg-morocco-gold text-white dark:text-morocco-dark rounded-full shadow-lg shadow-morocco-red/30 dark:shadow-morocco-gold/30 flex items-center justify-center opacity-0 translate-y-4 transition-all duration-300 hover:scale-110 z-50" aria-label="Back to top">
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 rtl:right-auto rtl:left-4 sm:rtl:left-6 w-10 h-10 sm:w-11 sm:h-11 text-white rounded-full shadow-lg flex items-center justify-center opacity-0 translate-y-4 transition-all duration-300 hover:scale-110 z-50" style="background:var(--accent);box-shadow:0 4px 16px var(--accent-weak)" aria-label="Back to top">
   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
 </button>
 
@@ -1181,262 +959,263 @@ const categories = {
 };
 
 const i18n = {
-  en:{search:"Search services...",results:"{n} services found",noResults:"No services found",noResultsDesc:"Try adjusting your search or filters",badge:"Open Source Directory",title1:"Explore Morocco's",title2:"Digital Government",desc:"Your one-stop guide to Morocco's e-government ecosystem. Discover and access digital services for taxes, identity, health, education, social security, business registration, transport, and more.",more:"& 150+ more",statServices:"Services",statCategories:"Categories",statLangs:"Languages",visit:"Visit",footer:"An open-source directory of Moroccan government digital services, curated for citizens and developers.",contribute:"Contribute",starGh:"Star on GitHub"},
-  fr:{search:"Rechercher des services...",results:"{n} services trouvés",noResults:"Aucun service trouvé",noResultsDesc:"Essayez de modifier votre recherche ou vos filtres",badge:"Répertoire Open Source",title1:"Explorez le Maroc",title2:"Numérique",desc:"Votre guide complet de l'écosystème e-gouvernement marocain. Découvrez et accédez aux services numériques pour les impôts, l'identité, la santé, l'éducation, la sécurité sociale, la création d'entreprise, les transports et plus encore.",more:"& 150+ autres",statServices:"Services",statCategories:"Catégories",statLangs:"Langues",visit:"Visiter",footer:"Un répertoire open-source des services numériques gouvernementaux marocains, pour les citoyens et les développeurs.",contribute:"Contribuer",starGh:"Star sur GitHub"},
-  ar:{search:"البحث عن خدمات...",results:"{n} خدمة",noResults:"لم يتم العثور على خدمات",noResultsDesc:"حاول تعديل البحث أو الفلاتر",badge:"دليل مفتوح المصدر",title1:"اكتشف المغرب",title2:"الرقمي",desc:"دليلك الشامل لمنظومة الحكومة الإلكترونية المغربية. اكتشف وادخل إلى الخدمات الرقمية للضرائب والهوية والصحة والتعليم والضمان الاجتماعي وتأسيس المقاولات والنقل وغيرها.",more:"و 150+ خدمة أخرى",statServices:"خدمة",statCategories:"فئة",statLangs:"لغات",visit:"زيارة",footer:"دليل مفتوح المصدر للخدمات الرقمية الحكومية المغربية، مُعد للمواطنين والمطورين.",contribute:"المساهمة",starGh:"نجمة على GitHub"},
+  en:{searchList:"Search 160 services…",palettePh:"Search services, categories, actions…",results:"{n} results",noResults:"No services found",noResultsDesc:"Try adjusting your search or filters",sortName:"Name",sortCat:"Category",pServices:"Services",pCats:"Jump to category",pActions:"Actions",aLang:"Switch language",aTheme:"Toggle dark mode",pNav:"navigate",pOpen:"open",pClose:"close",pEmpty:"No results found",footer:"An open-source directory of Moroccan government digital services, curated for citizens and developers.",contribute:"Contribute",starGh:"Star on GitHub"},
+  fr:{searchList:"Rechercher parmi 160 services…",palettePh:"Rechercher services, catégories, actions…",results:"{n} résultats",noResults:"Aucun service trouvé",noResultsDesc:"Essayez de modifier votre recherche ou vos filtres",sortName:"Nom",sortCat:"Catégorie",pServices:"Services",pCats:"Aller à une catégorie",pActions:"Actions",aLang:"Changer de langue",aTheme:"Basculer le mode sombre",pNav:"naviguer",pOpen:"ouvrir",pClose:"fermer",pEmpty:"Aucun résultat",footer:"Un répertoire open-source des services numériques gouvernementaux marocains, pour les citoyens et les développeurs.",contribute:"Contribuer",starGh:"Star sur GitHub"},
+  ar:{searchList:"ابحث في 160 خدمة…",palettePh:"ابحث عن الخدمات والفئات والإجراءات…",results:"{n} نتيجة",noResults:"لم يتم العثور على خدمات",noResultsDesc:"حاول تعديل البحث أو الفلاتر",sortName:"الاسم",sortCat:"الفئة",pServices:"الخدمات",pCats:"الانتقال إلى فئة",pActions:"إجراءات",aLang:"تغيير اللغة",aTheme:"تبديل الوضع الداكن",pNav:"تنقّل",pOpen:"فتح",pClose:"إغلاق",pEmpty:"لا توجد نتائج",footer:"دليل مفتوح المصدر للخدمات الرقمية الحكومية المغربية، مُعد للمواطنين والمطورين.",contribute:"المساهمة",starGh:"نجمة على GitHub"},
 };
 
 // ===================== STATE =====================
-let currentLang = 'en';
-let currentCategory = 'all';
-let currentSearch = '';
-let currentPage = 1;
-const PER_PAGE = 12;
+let currentLang='en', currentCategory='all', currentSearch='', sortMode='name', currentPage=1;
+const PER_PAGE=24;
+const $=id=>document.getElementById(id);
+const cleanDomain=u=>u.replace(/^https?:\/\//,'').replace(/^www\./,'').replace(/\/.*$/,'');
 
-// ===================== FUNCTIONS =====================
-function setLang(lang) {
-  currentLang = lang;
-  currentPage = 1;
-  const isRtl = lang === 'ar';
-  document.documentElement.lang = lang;
-  document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-
-  // Update lang buttons
-  document.querySelectorAll('[data-lang-btn]').forEach(b => {
-    b.classList.toggle('chip-active', b.dataset.langBtn === lang);
-    if (b.dataset.langBtn !== lang) { b.classList.remove('chip-active'); b.className = b.className.replace('chip-active',''); }
-  });
-  document.querySelectorAll('[data-lang-btn]').forEach(b => {
-    if (b.dataset.langBtn === lang) b.classList.add('chip-active');
-    else b.classList.remove('chip-active');
-  });
-
-  // Update static text
-  const t = i18n[lang];
-  document.getElementById('searchInput').placeholder = t.search;
-  document.getElementById('hero-badge').textContent = t.badge;
-  document.getElementById('hero-title-1').textContent = t.title1;
-  document.getElementById('hero-title-2').textContent = t.title2;
-  document.getElementById('hero-desc').textContent = t.desc;
-  document.getElementById('hero-more').textContent = t.more;
-  document.getElementById('stat-services').textContent = t.statServices;
-  document.getElementById('stat-categories').textContent = t.statCategories;
-  document.getElementById('stat-langs').textContent = t.statLangs;
-  document.getElementById('empty-title').textContent = t.noResults;
-  document.getElementById('empty-desc').textContent = t.noResultsDesc;
-  document.getElementById('footer-text').textContent = t.footer;
-  document.getElementById('footer-contribute-text').textContent = t.contribute;
-  document.getElementById('footer-star').textContent = t.starGh;
-
-  // Update chips
+// ===================== LANGUAGE =====================
+function setLang(lang){
+  currentLang=lang;
+  const isRtl=lang==='ar';
+  document.documentElement.lang=lang;
+  document.documentElement.dir=isRtl?'rtl':'ltr';
+  document.querySelectorAll('[data-lang-btn]').forEach(b=>b.classList.toggle('chip-active', b.dataset.langBtn===lang));
+  const t=i18n[lang];
+  $('searchInput').placeholder=t.searchList;
+  $('paletteInput').placeholder=t.palettePh;
+  $('empty-title').textContent=t.noResults;
+  $('empty-desc').textContent=t.noResultsDesc;
+  $('footer-text').textContent=t.footer;
+  $('footer-contribute-text').textContent=t.contribute;
+  $('footer-star').textContent=t.starGh;
+  $('ph-nav').textContent=t.pNav; $('ph-open').textContent=t.pOpen; $('ph-close').textContent=t.pClose;
+  updateSortLabel();
   buildChips();
   render();
-  if (typeof initChipScroll === 'function') initChipScroll();
+  initChipScroll();
+  requestAnimationFrame(syncHeaderH);
 }
+function updateSortLabel(){ $('sortLabel').textContent=i18n[currentLang][sortMode==='name'?'sortName':'sortCat']; }
+function syncHeaderH(){ const h=$('topbar'); if(h) document.documentElement.style.setProperty('--head-h', h.offsetHeight+'px'); }
 
-function toggleDark() {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('dark', document.documentElement.classList.contains('dark'));
-}
+// ===================== THEME =====================
 
-function filterCategory(cat) {
-  currentCategory = cat;
-  currentPage = 1;
-  document.querySelectorAll('[data-chip]').forEach(c => {
-    c.classList.toggle('chip-active', c.dataset.chip === cat);
-    if (c.dataset.chip !== cat) {
-      c.classList.remove('chip-active','bg-morocco-red','text-white','border-morocco-red');
-      c.classList.add('bg-white/60','dark:bg-white/5','text-morocco-dark/60','dark:text-white/70','border-morocco-red/10','dark:border-morocco-gold/10');
-    } else {
-      c.classList.add('chip-active','bg-morocco-red','text-white','border-morocco-red');
-      c.classList.remove('bg-white/60','dark:bg-white/5','text-morocco-dark/60','dark:text-white/70','border-morocco-red/10','dark:border-morocco-gold/10');
-    }
-  });
-  render();
-}
+// ===================== FILTER / SORT =====================
+function filterCategory(cat){ currentCategory=cat; currentPage=1; document.querySelectorAll('[data-chip]').forEach(c=>c.classList.toggle('chip-active', c.dataset.chip===cat)); render(); }
+function toggleSort(){ sortMode=sortMode==='name'?'cat':'name'; currentPage=1; updateSortLabel(); render(); }
 
-function buildChips() {
-  const container = document.getElementById('chipContainer');
-  container.innerHTML = '';
-  Object.entries(categories).forEach(([key, val]) => {
-    const btn = document.createElement('button');
-    btn.dataset.chip = key;
-    btn.onclick = () => filterCategory(key);
-    btn.className = 'shrink-0 px-3 sm:px-4 py-1.5 text-[11px] sm:text-xs font-semibold rounded-full border transition-all ' +
-      (key === currentCategory ? 'chip-active bg-morocco-red text-white border-morocco-red' : 'bg-white/60 dark:bg-white/5 text-morocco-dark/60 dark:text-white/70 border-morocco-red/10 dark:border-morocco-gold/10 hover:border-morocco-red/30');
-    btn.textContent = (val.icon ? val.icon + ' ' : '') + val[currentLang];
-    container.appendChild(btn);
+function buildChips(){
+  const c=$('chipContainer'); c.innerHTML='';
+  Object.entries(categories).forEach(([key,val])=>{
+    const b=document.createElement('button');
+    b.dataset.chip=key; b.onclick=()=>filterCategory(key);
+    b.className='shrink-0 px-3 py-1.5 text-[12px] font-semibold rounded-full border transition-all '+
+      (key===currentCategory?'chip-active':'bg-white/70 dark:bg-white/5 text-muted border-black/10 dark:border-white/10');
+    b.textContent=(val.icon?val.icon+' ':'')+val[currentLang];
+    c.appendChild(b);
   });
 }
 
-function getFiltered() {
-  return services.filter(s => {
-    const matchCat = currentCategory === 'all' || s.cat === currentCategory;
-    const q = currentSearch.toLowerCase();
-    const matchSearch = !q ||
-      s.name[currentLang].toLowerCase().includes(q) ||
-      s.desc[currentLang].toLowerCase().includes(q) ||
-      s.url.toLowerCase().includes(q) ||
-      (categories[s.cat] && categories[s.cat][currentLang].toLowerCase().includes(q));
-    return matchCat && matchSearch;
+function getFiltered(){
+  const q=currentSearch.trim().toLowerCase();
+  const list=services.filter(s=>{
+    const mc=currentCategory==='all'||s.cat===currentCategory;
+    const ms=!q||s.name[currentLang].toLowerCase().includes(q)||s.desc[currentLang].toLowerCase().includes(q)||s.url.toLowerCase().includes(q)||(categories[s.cat]&&categories[s.cat][currentLang].toLowerCase().includes(q));
+    return mc&&ms;
   });
+  const coll=new Intl.Collator(currentLang);
+  if(sortMode==='name') list.sort((a,b)=>coll.compare(a.name[currentLang],b.name[currentLang]));
+  else list.sort((a,b)=>coll.compare(categories[a.cat][currentLang],categories[b.cat][currentLang])||coll.compare(a.name[currentLang],b.name[currentLang]));
+  return list;
 }
 
-function render() {
-  const filtered = getFiltered();
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
-  if (currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage - 1) * PER_PAGE;
-  const pageItems = filtered.slice(start, start + PER_PAGE);
+const ARROW='<svg class="p-arrow w-4 h-4 shrink-0 text-muted g-accent transition-colors rtl:rotate-180 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8m9 0v9"/></svg>';
+const LINKICO='<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.83 10.17a4 4 0 010 5.66l-3 3a4 4 0 01-5.66-5.66l1.5-1.5m4.5 1.16a4 4 0 010-5.66l3-3a4 4 0 015.66 5.66l-1.5 1.5"/></svg>';
+function rowHTML(s){
+  const cat=categories[s.cat]||{};
+  return '<a href="'+s.url+'" target="_blank" rel="noopener" class="scard group flex flex-col w-full rounded-xl border border-black/8 dark:border-white/10 bg-white dark:bg-white/[0.02] p-4 sm:p-[18px]">'
+    +'<div class="flex items-start gap-3">'
+      +'<span class="cat-ico grid place-items-center w-10 h-10 rounded-lg shrink-0 text-lg">'+(cat.icon||'🔗')+'</span>'
+      +'<div class="min-w-0 flex-1">'
+        +'<div class="g-accent font-semibold text-[15px] sm:text-[15.5px] text-morocco-dark dark:text-white truncate transition-colors">'+s.name[currentLang]+'</div>'
+        +'<div class="text-[12px] text-muted truncate mt-0.5">'+(cat[currentLang]||'')+'</div>'
+      +'</div>'
+      +ARROW
+    +'</div>'
+    +'<p class="clamp2 text-[13px] sm:text-[13.5px] text-muted leading-relaxed mt-3">'+s.desc[currentLang]+'</p>'
+    +'<div class="mt-auto pt-4 flex items-center gap-1.5 text-[12px] text-muted opacity-80 font-mono truncate">'+LINKICO+'<span class="truncate">'+cleanDomain(s.url)+'</span></div>'
+  +'</a>';
+}
+function headerHTML(label){
+  return '<div class="cat-head sticky z-10 bg-white/95 dark:bg-black/95 backdrop-blur px-1 py-2 text-[11px] font-bold uppercase tracking-[0.1em] border-b border-black/8 dark:border-white/10" style="top:var(--head-h,108px)">'+label+'</div>';
+}
 
-  // Results count
-  document.getElementById('resultsCount').textContent = i18n[currentLang].results.replace('{n}', filtered.length);
+const mqMobile = window.matchMedia('(max-width:639px)');
+function render(){
+  const mobile=mqMobile.matches;
+  const filtered=getFiltered();
+  const total=filtered.length;
+  $('resultsCount').textContent=i18n[currentLang].results.replace('{n}',total);
+  const list=$('serviceList'), empty=$('emptyState'), nav=$('carouselNav');
+  if(!total){ list.innerHTML=''; list.classList.add('hidden'); empty.classList.remove('hidden'); $('pagination').innerHTML=''; if(nav) nav.style.display='none'; return; }
+  empty.classList.add('hidden'); list.classList.remove('hidden');
 
-  // Grid
-  const grid = document.getElementById('serviceGrid');
-  grid.innerHTML = '';
-  const empty = document.getElementById('emptyState');
-
-  if (pageItems.length === 0) {
-    empty.classList.remove('hidden');
-    grid.classList.add('hidden');
+  let items, totalPages=1;
+  if(mobile){
+    items=filtered;                                   // one horizontal carousel of every match
   } else {
-    empty.classList.add('hidden');
-    grid.classList.remove('hidden');
-    pageItems.forEach((s, i) => {
-      const cat = categories[s.cat] || {};
-      const card = document.createElement('a');
-      card.href = s.url;
-      card.target = '_blank';
-      card.rel = 'noopener';
-      card.className = 'service-card card-enter relative group block bg-white dark:bg-transparent border border-morocco-red/8 dark:border-morocco-gold/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 hover:shadow-xl hover:shadow-morocco-red/5';
-      card.style.animationDelay = (i * 0.04) + 's';
-      card.innerHTML = `
-        <div class="card-shine rounded-2xl"></div>
-        <div class="flex items-start justify-between mb-3 gap-2">
-          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-morocco-red/8 dark:bg-morocco-gold/15 text-morocco-red dark:text-morocco-gold text-[10px] font-semibold rounded-full tracking-wide uppercase">${cat.icon||''} ${cat[currentLang]||''}</span>
-          <svg class="w-4 h-4 text-morocco-dark/20 dark:text-white/30 group-hover:text-morocco-red dark:group-hover:text-morocco-gold transition-colors shrink-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-        </div>
-        <h3 class="font-display font-bold text-base text-morocco-dark dark:text-white mb-2 group-hover:text-morocco-red dark:group-hover:text-morocco-gold transition-colors leading-snug">${s.name[currentLang]}</h3>
-        <p class="font-display font-bold text-xs text-morocco-dark/50 dark:text-white/70 leading-relaxed line-clamp-3">${s.desc[currentLang]}</p>
-        <div class="mt-3 pt-3 border-t border-morocco-red/5 dark:border-morocco-gold/12 flex items-center gap-1.5 text-[10px] text-morocco-dark/30 dark:text-white/55 font-mono truncate">
-          <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-          ${s.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+    totalPages=Math.max(1, Math.ceil(total/PER_PAGE));
+    if(currentPage>totalPages) currentPage=totalPages;
+    if(currentPage<1) currentPage=1;
+    const s=(currentPage-1)*PER_PAGE;
+    items=filtered.slice(s, s+PER_PAGE);
   }
 
-  // Pagination
-  const pag = document.getElementById('pagination');
-  pag.innerHTML = '';
-  if (totalPages > 1) {
-    // Prev
-    const prev = document.createElement('button');
-    prev.innerHTML = currentLang === 'ar' ? '→' : '←';
-    prev.className = 'pag-btn w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm border border-morocco-red/10 dark:border-morocco-gold/10 transition-all ' + (currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-morocco-red/10 cursor-pointer');
-    prev.disabled = currentPage === 1;
-    prev.onclick = () => { if (currentPage > 1) { currentPage--; render(); scrollToGrid(); } };
-    pag.appendChild(prev);
-
-    // Page numbers
-    const maxVisible = 5;
-    let startP = Math.max(1, currentPage - Math.floor(maxVisible/2));
-    let endP = Math.min(totalPages, startP + maxVisible - 1);
-    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
-
-    for (let p = startP; p <= endP; p++) {
-      const btn = document.createElement('button');
-      btn.textContent = p;
-      btn.className = 'w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ' +
-        (p === currentPage ? 'pag-btn-active bg-morocco-red dark:bg-morocco-gold text-white dark:text-morocco-dark' : 'pag-btn border border-morocco-red/10 dark:border-morocco-gold/10 hover:bg-morocco-red/10');
-      btn.onclick = () => { currentPage = p; render(); scrollToGrid(); };
-      pag.appendChild(btn);
+  let html='';
+  if(mobile){
+    for(let k=0;k<items.length;k+=MOBILE_PER_SLIDE){
+      html+='<div class="carousel-slide w-full shrink-0 snap-center flex flex-col gap-3">'+items.slice(k,k+MOBILE_PER_SLIDE).map(rowHTML).join('')+'</div>';
     }
+  } else if(sortMode==='cat'){
+    let cur=null;
+    items.forEach(s=>{ if(s.cat!==cur){ cur=s.cat; const c=categories[cur]; html+=headerHTML((c.icon?c.icon+' ':'')+c[currentLang]); } html+=rowHTML(s); });
+  } else {
+    html=items.map(rowHTML).join('');
+  }
+  list.innerHTML=html;
 
-    // Next
-    const next = document.createElement('button');
-    next.innerHTML = currentLang === 'ar' ? '←' : '→';
-    next.className = 'pag-btn w-10 h-10 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-sm border border-morocco-red/10 dark:border-morocco-gold/10 transition-all ' + (currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-morocco-red/10 cursor-pointer');
-    next.disabled = currentPage === totalPages;
-    next.onclick = () => { if (currentPage < totalPages) { currentPage++; render(); scrollToGrid(); } };
-    pag.appendChild(next);
+  if(mobile){
+    $('pagination').innerHTML='';
+    list.scrollLeft = document.documentElement.dir==='rtl' ? list.scrollWidth : 0;
+    if(nav) nav.style.display = items.length>1 ? 'flex' : 'none';
+    updateCarCounter();
+  } else {
+    if(nav) nav.style.display='none';
+    renderPagination(totalPages);
   }
 }
 
-function scrollToGrid() {
-  document.getElementById('serviceGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+// --- Mobile carousel (3 cards per horizontal page) ---
+const MOBILE_PER_SLIDE=3;
+function carState(){
+  const list=$('serviceList'); const u=[...list.querySelectorAll('.carousel-slide')];
+  if(!u.length) return {i:0,n:0,u,list};
+  const lr=list.getBoundingClientRect(); const mid=lr.left+lr.width/2;
+  let best=0, bd=Infinity;
+  u.forEach((el,idx)=>{ const r=el.getBoundingClientRect(); const cc=r.left+r.width/2; const d=Math.abs(cc-mid); if(d<bd){ bd=d; best=idx; } });
+  return {i:best, n:u.length, u, list};
 }
+function updateCarCounter(){ const el=$('carCounter'); if(!el) return; const {i,n}=carState(); el.textContent=(n?i+1:0)+' / '+n; }
+function carGo(t){
+  const st=carState(); if(!st.n) return;
+  t=Math.max(0, Math.min(st.n-1, t));
+  const s=st.u[t];
+  const left=st.list.scrollLeft + (s.getBoundingClientRect().left - st.list.getBoundingClientRect().left);
+  st.list.scrollTo({ left, behavior:'smooth' });   // horizontal only — no vertical jump
+}
+function carPrev(){ carGo(carState().i-1); }
+function carNext(){ carGo(carState().i+1); }
+
+function gotoPage(p){ currentPage=p; render(); const y=$('serviceList').getBoundingClientRect().top+window.scrollY-116; window.scrollTo({top:y,behavior:'smooth'}); }
+
+function pageList(cur,tot){
+  const out=[];
+  if(tot<=7){ for(let i=1;i<=tot;i++) out.push(i); return out; }
+  out.push(1);
+  let s=Math.max(2,cur-1), e=Math.min(tot-1,cur+1);
+  if(cur<=3){ s=2; e=4; }
+  if(cur>=tot-2){ s=tot-3; e=tot-1; }
+  if(s>2) out.push('…');
+  for(let i=s;i<=e;i++) out.push(i);
+  if(e<tot-1) out.push('…');
+  out.push(tot);
+  return out;
+}
+
+function renderPagination(totalPages){
+  const pag=$('pagination'); pag.innerHTML='';
+  if(totalPages<=1) return;
+  const rtl=document.documentElement.dir==='rtl';
+  const mk=(label,disabled,active,onclick,aria)=>{
+    const b=document.createElement('button');
+    b.className='pg-btn'+(active?' pg-active':'')+(disabled?' pg-disabled':'');
+    b.innerHTML=label; if(aria) b.setAttribute('aria-label',aria);
+    if(!disabled&&!active) b.onclick=onclick;
+    return b;
+  };
+  pag.appendChild(mk(rtl?'›':'‹', currentPage===1, false, ()=>gotoPage(currentPage-1), 'Previous'));
+  pageList(currentPage,totalPages).forEach(p=>{
+    if(p==='…'){ const s=document.createElement('span'); s.className='px-1 text-muted text-[12px] select-none'; s.textContent='…'; pag.appendChild(s); }
+    else pag.appendChild(mk(String(p), false, p===currentPage, ()=>gotoPage(p)));
+  });
+  pag.appendChild(mk(rtl?'‹':'›', currentPage===totalPages, false, ()=>gotoPage(currentPage+1), 'Next'));
+}
+
+// ===================== COMMAND PALETTE =====================
+let pItems=[], pActive=0;
+function isPaletteOpen(){ return !$('palette').classList.contains('hidden'); }
+function openPalette(){ $('palette').classList.remove('hidden'); const inp=$('paletteInput'); inp.value=''; buildPalette(''); setTimeout(()=>inp.focus(),20); }
+function closePalette(){ $('palette').classList.add('hidden'); }
+function servicesCount(k){ return String(services.filter(s=>s.cat===k).length); }
+function pRow(i,main,meta,arrow){
+  return '<div class="p-item flex items-center gap-3 px-4 py-2 cursor-pointer" data-i="'+i+'" onmousemove="setActive('+i+')" onclick="activate('+i+')">'
+    +'<div class="flex-1 min-w-0 text-[15px] text-morocco-dark dark:text-white">'+main+'</div>'
+    +(meta?'<span class="text-[12px] text-muted shrink-0">'+meta+'</span>':'')
+    +(arrow?'<svg class="p-arrow w-3.5 h-3.5 shrink-0 text-muted opacity-40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8m9 0v9"/></svg>':'')
+    +'</div>';
+}
+function buildPalette(q){
+  q=(q||'').trim().toLowerCase(); const t=i18n[currentLang]; pItems=[];
+  const svc=services.filter(s=>!q||s.name[currentLang].toLowerCase().includes(q)||s.desc[currentLang].toLowerCase().includes(q)||cleanDomain(s.url).includes(q)).slice(0,8);
+  const cats=Object.entries(categories).filter(([k,v])=>k!=='all'&&(!q||v[currentLang].toLowerCase().includes(q))).slice(0,5);
+  const actions=[
+    {label:t.aLang+' → EN', run:()=>{closePalette();setLang('en');}},
+    {label:t.aLang+' → FR', run:()=>{closePalette();setLang('fr');}},
+    {label:t.aLang+' → AR', run:()=>{closePalette();setLang('ar');}},
+  ].filter(a=>!q||a.label.toLowerCase().includes(q));
+  let html='', idx=0;
+  if(svc.length){ html+='<div class="p-section">'+t.pServices+'</div>'; svc.forEach(s=>{ pItems.push({type:'svc',url:s.url}); html+=pRow(idx++, '<span class="truncate inline-block max-w-full align-bottom font-medium">'+s.name[currentLang]+'</span>', categories[s.cat][currentLang], true); }); }
+  if(cats.length){ html+='<div class="p-section">'+t.pCats+'</div>'; cats.forEach(([k,v])=>{ pItems.push({type:'cat',key:k}); html+=pRow(idx++, (v.icon||'')+' '+v[currentLang], servicesCount(k), false); }); }
+  if(actions.length){ html+='<div class="p-section">'+t.pActions+'</div>'; actions.forEach(a=>{ pItems.push({type:'act',run:a.run}); html+=pRow(idx++, a.label, '', false); }); }
+  if(!pItems.length) html='<div class="px-4 py-8 text-center text-[13px] text-muted">'+t.pEmpty+'</div>';
+  $('paletteResults').innerHTML=html; pActive=0; highlight();
+}
+function highlight(){ document.querySelectorAll('#paletteResults .p-item').forEach((el,i)=>el.classList.toggle('active', i===pActive)); const a=document.querySelector('#paletteResults .p-item.active'); if(a) a.scrollIntoView({block:'nearest'}); }
+function setActive(i){ pActive=i; highlight(); }
+function activate(i){ const it=pItems[i]; if(!it) return; if(it.type==='svc'){ window.open(it.url,'_blank','noopener'); closePalette(); } else if(it.type==='cat'){ closePalette(); filterCategory(it.key); const chip=document.querySelector('[data-chip="'+it.key+'"]'); if(chip) chip.scrollIntoView({inline:'center',block:'nearest'}); } else if(it.type==='act'){ it.run(); } }
+
+// ===================== KEYBOARD =====================
+document.addEventListener('keydown', e=>{
+  const mod=e.metaKey||e.ctrlKey;
+  if(mod && e.key.toLowerCase()==='k'){ e.preventDefault(); isPaletteOpen()?closePalette():openPalette(); return; }
+  if(e.key==='/' && !isPaletteOpen() && !/^(input|textarea)$/i.test(document.activeElement.tagName)){ e.preventDefault(); openPalette(); return; }
+  if(isPaletteOpen()){
+    if(e.key==='Escape'){ e.preventDefault(); closePalette(); }
+    else if(e.key==='ArrowDown'){ e.preventDefault(); pActive=Math.min(pActive+1,pItems.length-1); highlight(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); pActive=Math.max(pActive-1,0); highlight(); }
+    else if(e.key==='Enter'){ e.preventDefault(); activate(pActive); }
+  } else if(e.key==='Escape' && document.activeElement===$('searchInput') && $('searchInput').value){ $('searchInput').value=''; currentSearch=''; render(); }
+});
 
 // ===================== INIT =====================
-// Dark mode — light by default, only dark if user explicitly toggled
-if (localStorage.getItem('dark') === 'true') {
-  document.documentElement.classList.add('dark');
+$('searchInput').addEventListener('input', e=>{ currentSearch=e.target.value; currentPage=1; render(); });
+$('paletteInput').addEventListener('input', e=>buildPalette(e.target.value));
+window.addEventListener('scroll', ()=>{ const b=$('backToTop'); if(window.scrollY>500){ b.style.opacity='1'; b.style.transform='translateY(0)'; } else { b.style.opacity='0'; b.style.transform='translateY(1rem)'; } });
+
+function initChipScroll(){
+  const container=$('chipContainer'), wrap=container.parentElement;
+  function upd(){ const isRtl=document.documentElement.dir==='rtl'; const sl=isRtl?-container.scrollLeft:container.scrollLeft; const max=container.scrollWidth-container.clientWidth; wrap.classList.toggle('scrolled-end', sl>=max-2 || max<=2); }
+  container.addEventListener('scroll',upd,{passive:true}); window.addEventListener('resize',upd); setTimeout(upd,120);
 }
 
-// Search
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  currentSearch = e.target.value;
-  currentPage = 1;
-  render();
-});
+const urlLang=new URLSearchParams(location.search).get('lang');
+if(urlLang && ['en','fr','ar'].includes(urlLang)) currentLang=urlLang;
+setLang(currentLang);
+syncHeaderH();
+window.addEventListener('resize', syncHeaderH);
+window.addEventListener('load', syncHeaderH);
 
-// Back to top
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('backToTop');
-  if (window.scrollY > 400) { btn.style.opacity='1'; btn.style.transform='translateY(0)'; }
-  else { btn.style.opacity='0'; btn.style.transform='translateY(1rem)'; }
-});
+// Mobile carousel: update counter on swipe, re-render when crossing the mobile/desktop breakpoint
+$('serviceList').addEventListener('scroll', ()=>{ if(mqMobile.matches) updateCarCounter(); }, {passive:true});
+mqMobile.addEventListener('change', ()=>{ currentPage=1; render(); });
 
-// Chip scroll indicators
-function initChipScroll() {
-  const container = document.getElementById('chipContainer');
-  const wrap = container.parentElement;
-  const hint = document.getElementById('scrollHint');
-  let hintDismissed = false;
-
-  function updateFades() {
-    const isRtl = document.documentElement.dir === 'rtl';
-    const scrollLeft = isRtl ? -container.scrollLeft : container.scrollLeft;
-    const maxScroll = container.scrollWidth - container.clientWidth;
-    const atStart = scrollLeft <= 2;
-    const atEnd = scrollLeft >= maxScroll - 2;
-
-    wrap.classList.toggle('scrolled-start', !atStart);
-    wrap.classList.toggle('scrolled-end', atEnd);
-
-    // Hide hint after first scroll
-    if (!atStart && !hintDismissed) {
-      hintDismissed = true;
-      hint.style.opacity = '0';
-    }
-
-    // Hide fades entirely if no overflow
-    if (container.scrollWidth <= container.clientWidth + 2) {
-      wrap.classList.add('scrolled-end');
-      wrap.classList.remove('scrolled-start');
-      hint.style.opacity = '0';
-    }
-  }
-
-  container.addEventListener('scroll', updateFades, { passive: true });
-  window.addEventListener('resize', updateFades);
-  // Run after chips are built
-  setTimeout(updateFades, 100);
-}
-
-// Read ?lang= param from URL (for hreflang / SEO crawlers)
-const urlLang = new URLSearchParams(window.location.search).get('lang');
-if (urlLang && ['en', 'fr', 'ar'].includes(urlLang)) {
-  currentLang = urlLang;
-}
-
-// Boot
-buildChips();
-if (urlLang && urlLang !== 'en') setLang(urlLang);
-else render();
-initChipScroll();
 </script>
 </body>
 </html>
