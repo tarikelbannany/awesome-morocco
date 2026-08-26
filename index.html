@@ -13,12 +13,12 @@
 <meta name="theme-color" content="#C1272D">
 <meta name="theme-color" content="#111320" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://tarikelbannany.github.io/awesome-morocco/">
-<link rel="sitemap" type="application/xml" href="sitemap.xml">
+<link rel="sitemap" type="application/xml" href="/awesome-morocco/sitemap.xml">
 
 <!-- Alternate languages (hreflang) -->
-<link rel="alternate" hreflang="en" href="https://tarikelbannany.github.io/awesome-morocco/">
-<link rel="alternate" hreflang="fr" href="https://tarikelbannany.github.io/awesome-morocco/?lang=fr">
-<link rel="alternate" hreflang="ar" href="https://tarikelbannany.github.io/awesome-morocco/?lang=ar">
+<link rel="alternate" hreflang="en" href="https://tarikelbannany.github.io/awesome-morocco/en/">
+<link rel="alternate" hreflang="fr" href="https://tarikelbannany.github.io/awesome-morocco/fr/">
+<link rel="alternate" hreflang="ar" href="https://tarikelbannany.github.io/awesome-morocco/ar/">
 <link rel="alternate" hreflang="x-default" href="https://tarikelbannany.github.io/awesome-morocco/">
 
 <!-- Open Graph / Facebook -->
@@ -27,6 +27,8 @@
 <meta property="og:title" content="Awesome Morocco — 160+ Moroccan Government Digital Services">
 <meta property="og:description" content="Your one-stop guide to Morocco's e-government ecosystem. Discover 160+ digital services across 33 categories — taxes, identity, health, education, social security, business, transport and more. Available in English, French, and Arabic.">
 <meta property="og:image" content="https://tarikelbannany.github.io/awesome-morocco/og-image.png">
+<meta property="og:image:secure_url" content="https://tarikelbannany.github.io/awesome-morocco/og-image.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Awesome Morocco — Directory of 160+ Moroccan Government Digital Services">
@@ -288,9 +290,9 @@ tailwind.config = {
       <!-- Actions (share top row with brand on mobile) -->
       <div class="order-2 sm:order-3 ml-auto sm:ml-0 flex items-center gap-1.5 shrink-0">
         <div class="flex rounded-lg p-0.5 bg-black/[0.05] dark:bg-white/[0.07]">
-          <button onclick="setLang('en')" data-lang-btn="en" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all chip-active">EN</button>
-          <button onclick="setLang('fr')" data-lang-btn="fr" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">FR</button>
-          <button onclick="setLang('ar')" data-lang-btn="ar" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">AR</button>
+          <button onclick="goLang('en')" data-lang-btn="en" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all chip-active">EN</button>
+          <button onclick="goLang('fr')" data-lang-btn="fr" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">FR</button>
+          <button onclick="goLang('ar')" data-lang-btn="ar" class="px-2.5 py-1.5 text-[12px] font-bold rounded-md transition-all text-muted hover:text-morocco-dark dark:hover:text-white">AR</button>
         </div>
         <a href="https://github.com/tarikelbannany/awesome-morocco" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg flex items-center justify-center text-muted hover:text-morocco-dark dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-all" aria-label="GitHub">
           <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -1166,9 +1168,9 @@ function buildPalette(q){
   const svc=services.filter(s=>!q||s.name[currentLang].toLowerCase().includes(q)||s.desc[currentLang].toLowerCase().includes(q)||cleanDomain(s.url).includes(q)).slice(0,8);
   const cats=Object.entries(categories).filter(([k,v])=>k!=='all'&&(!q||v[currentLang].toLowerCase().includes(q))).slice(0,5);
   const actions=[
-    {label:t.aLang+' → EN', run:()=>{closePalette();setLang('en');}},
-    {label:t.aLang+' → FR', run:()=>{closePalette();setLang('fr');}},
-    {label:t.aLang+' → AR', run:()=>{closePalette();setLang('ar');}},
+    {label:t.aLang+' → EN', run:()=>goLang('en')},
+    {label:t.aLang+' → FR', run:()=>goLang('fr')},
+    {label:t.aLang+' → AR', run:()=>goLang('ar')},
   ].filter(a=>!q||a.label.toLowerCase().includes(q));
   let html='', idx=0;
   if(svc.length){ html+='<div class="p-section">'+t.pServices+'</div>'; svc.forEach(s=>{ pItems.push({type:'svc',url:s.url}); html+=pRow(idx++, '<span class="truncate inline-block max-w-full align-bottom font-medium">'+s.name[currentLang]+'</span>', categories[s.cat][currentLang], true); }); }
@@ -1205,8 +1207,25 @@ function initChipScroll(){
   container.addEventListener('scroll',upd,{passive:true}); window.addEventListener('resize',upd); setTimeout(upd,120);
 }
 
-const urlLang=new URLSearchParams(location.search).get('lang');
-if(urlLang && ['en','fr','ar'].includes(urlLang)) currentLang=urlLang;
+// Language resolution: page-baked SITE_LANG → /en|/fr|/ar path → ?lang= → default en
+function detectLang(){
+  if(window.SITE_LANG && ['en','fr','ar'].includes(window.SITE_LANG)) return window.SITE_LANG;
+  const m=location.pathname.match(/\/(en|fr|ar)(?:\/|$)/);
+  if(m) return m[1];
+  const q=new URLSearchParams(location.search).get('lang');
+  if(q && ['en','fr','ar'].includes(q)) return q;
+  return 'en';
+}
+// Navigate to a language path (/en/, /fr/, /ar/) so the URL + share preview match the language
+function goLang(code){
+  if(code===currentLang) return;
+  const isFile = location.protocol === 'file:';       // local file:// needs an explicit index.html
+  let dir = location.pathname.replace(/[^/]*$/, '');   // drop filename (e.g. index.html) if present
+  dir = dir.replace(/(?:en|fr|ar)\/$/, '');            // drop the current language folder
+  if(!dir.endsWith('/')) dir += '/';
+  location.href = dir + code + '/' + (isFile ? 'index.html' : '');
+}
+currentLang=detectLang();
 setLang(currentLang);
 syncHeaderH();
 window.addEventListener('resize', syncHeaderH);
